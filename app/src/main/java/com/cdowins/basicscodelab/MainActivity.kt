@@ -3,16 +3,19 @@ package com.cdowins.basicscodelab
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cdowins.basicscodelab.ui.theme.BasicsCodelabTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +31,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyApp() {
-    var shouldShowOnboarding by remember { mutableStateOf(true) }
+
+    var shouldShowOnboarding by rememberSaveable { mutableStateOf(true) }
+   // var shouldShowOnboarding by remember { mutableStateOf(true) }
 
     if (shouldShowOnboarding) {
         OnboardingScreen(onContinueClicked = {shouldShowOnboarding=false})
@@ -70,6 +75,8 @@ fun OnboardingPreview() {
 }
 //Termina primera pantalla
 //----------------------------------------------------------------------
+//Inicio de segunda pantalla
+
 @Composable
 fun Greetings(names:List<String> = List(1000){"$it"}){
     LazyColumn(modifier = Modifier.padding(vertical = 4.dp) ){
@@ -79,27 +86,35 @@ fun Greetings(names:List<String> = List(1000){"$it"}){
     }
 
 }
-//---------------------------------------------------------------------
-//Inicio de segunda pantalla
+/*
+val extraPadding by animateDpAsState(if (expanded) 48.dp else 0.dp,
+  animationSpec = spring(
+        dampingRatio = Spring.DampingRatioMediumBouncy,
+        stiffness = Spring.StiffnessLow)) */
 @Composable
 fun Greeting(name: String) {
-    val expanded= remember { mutableStateOf(false)}
-    val extraPadding = if (expanded.value) 48.dp else 0.dp
+    var expanded by remember { mutableStateOf(false)}
+    val extraPadding by animateDpAsState(if (expanded) 48.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow))
+   // val extraPadding = if (expanded.value) 48.dp else 0.dp
     Surface(
         color = MaterialTheme.colors.primary,
         modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
         Row(modifier = Modifier.padding(24.dp)) {
             Column(modifier = Modifier
                 .weight(1f)
-                .padding(bottom = extraPadding)
+                //.background(color = extraPadding)
+                .padding(bottom = extraPadding.coerceAtLeast(0.dp))
             ) {
                 Text(text = "Hello,")
                 Text(text = name)
             }
             OutlinedButton(
-                onClick = { expanded.value=!expanded.value }
+                onClick = { expanded=!expanded }
             ) {
-                Text(if (expanded.value)"Show less" else "Show more")
+                Text(if (expanded)"Show less" else "Show more")
             }
         }
     }
