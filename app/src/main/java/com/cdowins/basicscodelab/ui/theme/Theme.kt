@@ -59,7 +59,5 @@ fun BasicsCodelabTheme(
         typography = Typography,
         shapes = Shapes,
         content = content
-
-
     )
 }
