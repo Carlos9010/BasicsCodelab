@@ -1,5 +1,5 @@
-# BasicsCodelab
-Codelab (Aspectos básicos de Jetpack Compose) impartido por el Equipo de desarrollo de Android. Google.
+# Codelab
+Aspectos básicos de Jetpack Compose (Impartido por el Equipo de desarrollo de Android. Google.)
 
 Link: https://developer.android.com/codelabs/jetpack-compose-basics?hl=es-419#0
 
